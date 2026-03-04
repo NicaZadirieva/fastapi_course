@@ -205,3 +205,6 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+/no_ht/.vs/no_ht.slnx
+no_ht/no_ht.pyproj
+no_ht/no_ht.slnx
