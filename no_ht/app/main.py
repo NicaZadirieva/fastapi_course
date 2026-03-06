@@ -1,5 +1,5 @@
 import random
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import FastAPI, HTTPException, Path, Response
 
 app = FastAPI()
 
@@ -17,4 +17,10 @@ def root(response: Response):
     # return {"Score": 10}
     else:
         response.status_code = 201
+    return {"Score": num}
+
+
+@app.get("/posts/{post_id}")
+def get_post(post_id: int = Path(ge=5)):
+    num = random.random()
     return {"Score": num}
