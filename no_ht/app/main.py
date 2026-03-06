@@ -23,3 +23,8 @@ def root(response: Response):
 @app.get("/posts/{post_id}")
 def get_post(post_id: int = Path(ge=5)):
     return {"id": post_id}
+
+
+@app.get("/posts")
+def get_posts(limit: int = 10, offset: int = 0):
+    return {"limit": limit, "offset": offset}
