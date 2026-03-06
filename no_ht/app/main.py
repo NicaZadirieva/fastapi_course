@@ -26,5 +26,9 @@ def get_post(post_id: int = Path(ge=5)):
 
 
 @app.get("/posts")
-def get_posts(limit: int = 10, offset: int = Query(default=0, ge=0, alias="Offset")):
-    return {"limit": limit, "offset": offset}
+def get_posts(
+    limit: int = 10,
+    offset: int = Query(default=0, ge=0, alias="Offset"),
+    tags: list[str] = Query([]),
+):
+    return {"limit": limit, "offset": offset, "tags": tags}
