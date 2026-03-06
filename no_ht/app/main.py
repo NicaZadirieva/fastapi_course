@@ -1,6 +1,6 @@
 from enum import Enum
 import random
-from fastapi import FastAPI, HTTPException, Path, Query, Response
+from fastapi import Body, FastAPI, HTTPException, Path, Query, Request, Response
 
 app = FastAPI()
 
@@ -39,3 +39,12 @@ def get_posts(
     order: SortOrder = SortOrder.asc,
 ):
     return {"limit": limit, "offset": offset, "tags": tags, "order": order}
+
+
+@app.post("/posts")
+async def create_post(
+    request: Request,
+    # body: dict = Body()
+):
+    data = await request.json()
+    return data
