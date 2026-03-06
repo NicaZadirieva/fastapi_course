@@ -1,6 +1,5 @@
 from enum import Enum
-import random
-from fastapi import APIRouter, HTTPException, Path, Query, Request, Response
+from fastapi import APIRouter, Path, Query, Request, Response
 
 router = APIRouter(prefix="/posts")
 
