@@ -22,5 +22,4 @@ def root(response: Response):
 
 @app.get("/posts/{post_id}")
 def get_post(post_id: int = Path(ge=5)):
-    num = random.random()
-    return {"Score": num}
+    return {"id": post_id}
