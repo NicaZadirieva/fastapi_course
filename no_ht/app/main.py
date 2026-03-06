@@ -1,5 +1,5 @@
 import random
-from fastapi import FastAPI, HTTPException, Path, Response
+from fastapi import FastAPI, HTTPException, Path, Query, Response
 
 app = FastAPI()
 
@@ -26,5 +26,5 @@ def get_post(post_id: int = Path(ge=5)):
 
 
 @app.get("/posts")
-def get_posts(limit: int = 10, offset: int = 0):
+def get_posts(limit: int = 10, offset: int = Query(default=0, ge=0)):
     return {"limit": limit, "offset": offset}
