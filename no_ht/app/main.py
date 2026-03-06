@@ -1,50 +1,5 @@
-from enum import Enum
-import random
-from fastapi import Body, FastAPI, HTTPException, Path, Query, Request, Response
+from fastapi import FastAPI
+from posts import routes
 
 app = FastAPI()
-
-
-class UnauthHTTPException(HTTPException):
-    def __init__(self) -> None:
-        super().__init__(401, "Не авторизован")
-
-
-@app.get("/")
-def root(response: Response):
-    num = random.random()
-    if num > 0.5:
-        raise UnauthHTTPException()
-    # return {"Score": 10}
-    else:
-        response.status_code = 201
-    return {"Score": num}
-
-
-@app.get("/posts/{post_id}")
-def get_post(post_id: int = Path(ge=5)):
-    return {"id": post_id}
-
-
-class SortOrder(str, Enum):
-    asc = "asc"
-    desc = "desc"
-
-
-@app.get("/posts")
-def get_posts(
-    limit: int = 10,
-    offset: int = Query(default=0, ge=0, alias="Offset"),
-    tags: list[str] = Query([]),
-    order: SortOrder = SortOrder.asc,
-):
-    return {"limit": limit, "offset": offset, "tags": tags, "order": order}
-
-
-@app.post("/posts")
-async def create_post(
-    request: Request,
-    # body: dict = Body()
-):
-    data = await request.json()
-    return data
+app.include_router(routes.router)
