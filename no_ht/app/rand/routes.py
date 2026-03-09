@@ -11,6 +11,4 @@ router = APIRouter(prefix="/rand")
 
 @router.get("/")
 def root(query: RandQuery = Depends()):
-    if query.rnd_from > query.rnd_to:
-        raise HTTPException(400, "rnd_from не должно быть больше rnd_to")
-    return randint(query.rnd_from, query.rnd_to)
+    return {"value": randint(query.rnd_from, query.rnd_to)}
