@@ -1,14 +1,16 @@
 # GET query rnd_from и rnd_to, возвращаемый int
 # в этом диапазоне
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 
 from random import randint
+
+from .schema import RandQuery
 
 router = APIRouter(prefix="/rand")
 
 
 @router.get("/")
-def root(rnd_from: int = 0, rnd_to: int = 100):
-    if rnd_from > rnd_to:
+def root(query: RandQuery = Depends()):
+    if query.rnd_from > query.rnd_to:
         raise HTTPException(400, "rnd_from не должно быть больше rnd_to")
-    return randint(rnd_from, rnd_to)
+    return randint(query.rnd_from, query.rnd_to)
