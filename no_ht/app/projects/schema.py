@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class ProjectCreateRequest(BaseModel):
@@ -18,3 +18,7 @@ class ProjectCreateRequest(BaseModel):
 class ProjectCreateResponse(BaseModel):
     id: int
     name: str
+
+
+class ProjectPath(BaseModel):
+    project_id: int = Field(gt=0)
