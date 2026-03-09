@@ -1,6 +1,5 @@
 from fastapi import HTTPException
 from pydantic import BaseModel, Field, model_validator
-from random import randint
 
 
 class RandQuery(BaseModel):
