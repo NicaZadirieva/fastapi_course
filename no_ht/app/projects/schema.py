@@ -22,3 +22,15 @@ class ProjectCreateResponse(BaseModel):
 
 class ProjectPath(BaseModel):
     project_id: int = Field(gt=0)
+
+
+class ProjectUpdateRequest(BaseModel):
+    name: str | None = None
+    description: str | None = None
+
+
+class ProjectUpdateResponse(BaseModel):
+    id: int
+    key: str
+    name: str
+    description: str | None = None
