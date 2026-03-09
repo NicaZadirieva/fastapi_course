@@ -13,3 +13,8 @@ class ProjectCreateRequest(BaseModel):
         if not value.strip():
             raise HTTPException(400, "key must be valid string")
         return value
+
+
+class ProjectCreateResponse(BaseModel):
+    id: int
+    name: str
