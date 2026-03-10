@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, Depends, Request
+from fastapi import APIRouter, Body, Depends
 
 from .schema import (
     ProjectCreateRequest,
@@ -9,10 +9,18 @@ from .schema import (
     ProjectUpdateResponse,
 )
 
-router = APIRouter(prefix="/projects")
+router = APIRouter(prefix="/projects", tags=["Projects"])
 
 
-@router.post("/", response_model=ProjectCreateResponse, status_code=201)
+@router.post(
+    "/",
+    response_model=ProjectCreateResponse,
+    status_code=201,
+    summary="Создает проект",
+    description="""
+    Создает проект. Если ошибка, то возвращает 500
+    """,
+)
 async def create_project(data: ProjectCreateRequest):
     return ProjectCreateResponse(id=1, name=data.name)
 
