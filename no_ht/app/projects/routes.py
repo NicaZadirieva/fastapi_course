@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Body, Depends
 
+from .service import ProjectService
+
 from .schema import (
     ProjectCreateRequest,
     ProjectCreateResponse,
