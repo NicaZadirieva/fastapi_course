@@ -65,6 +65,7 @@ async def update_post(
 
 @router.delete(
     "/{post_id}",
+    response_model=None,
     status_code=204,
     summary="Удаление поста по его идентификатору.",
     description="""
