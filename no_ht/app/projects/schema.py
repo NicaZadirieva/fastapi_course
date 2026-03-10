@@ -34,3 +34,10 @@ class ProjectUpdateResponse(BaseModel):
     key: str
     name: str
     description: str | None = None
+
+
+class ProjectGetResponse(BaseModel):
+    id: int
+    key: str
+    name: str
+    description: str | None = None

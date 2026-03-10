@@ -3,6 +3,7 @@ from fastapi import APIRouter, Body, Depends, Request
 from .schema import (
     ProjectCreateRequest,
     ProjectCreateResponse,
+    ProjectGetResponse,
     ProjectPath,
     ProjectUpdateRequest,
     ProjectUpdateResponse,
@@ -11,17 +12,19 @@ from .schema import (
 router = APIRouter(prefix="/projects")
 
 
-@router.post("/", response_model=ProjectCreateResponse)
+@router.post("/", response_model=ProjectCreateResponse, status_code=201)
 async def create_project(data: ProjectCreateRequest):
     return ProjectCreateResponse(id=1, name=data.name)
 
 
-@router.get("/{project_id}")
+@router.get("/{project_id}", response_model=ProjectGetResponse, status_code=200)
 async def get_project(path: ProjectPath = Depends()):
-    return {"id": path.project_id}
+    return ProjectGetResponse(
+        id=path.project_id, key="key", name="name", description="smth"
+    )
 
 
-@router.patch("/{project_id}")
+@router.patch("/{project_id}", response_model=ProjectUpdateResponse)
 async def update_project_desc_name(
     path: ProjectPath = Depends(), data: ProjectUpdateRequest = Body()
 ):
