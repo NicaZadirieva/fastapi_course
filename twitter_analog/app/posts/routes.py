@@ -1,10 +1,12 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Body, Depends
+
+from .schema import CreatePostRequest, PostPath, PostResponse, UpdatePostRequest
 
 router = APIRouter(prefix="/posts")
 
 
-@router.get("/{post_id}")
-def get_post(post_id: int):
+@router.get("/{post_id}", response_model=PostResponse, status_code=200)
+def get_post(post: PostPath = Depends()):
     """
     Получение поста по его уникальному идентификатору.
 
@@ -20,19 +22,18 @@ def get_post(post_id: int):
     - **404 Not Found**: Пост с таким ID отсутствует в базе данных.
     """
     # реализация функции...
+    return PostResponse(content="new post", id=post.post_id)
 
 
-@router.post("/")
+@router.post("/", response_model=PostResponse, status_code=201)
 async def create_post(
-    request: Request,
+    data: CreatePostRequest = Body(),
 ):
     """
     Создание нового поста.
 
     **Тело запроса (JSON):**
-    - **title** (str, обязательное): Заголовок поста.
     - **content** (str, обязательное): Содержимое поста.
-    - **published** (bool, необязательное): Флаг публикации (по умолчанию `true`).
 
     Возвращаемое значение:
     - Объект созданного поста с присвоенным `id` и временными метками.
@@ -42,20 +43,19 @@ async def create_post(
     - **422 Unprocessable Entity**: Ошибка валидации входных данных (например, отсутствуют обязательные поля или неверный формат).
     """
     # реализация...
+    return PostResponse(content=data.content, id=1)
 
 
-@router.put("/")
+@router.put("/", response_model=PostResponse, status_code=200)
 async def update_post(
-    request: Request,
+    data: UpdatePostRequest,
 ):
     """
     Обновление существующего поста.
 
     **Тело запроса (JSON):**
     - **id** (int, обязательное): Идентификатор обновляемого поста.
-    - **title** (str, необязательное): Новый заголовок (если требуется изменить).
     - **content** (str, необязательное): Новое содержимое (если требуется изменить).
-    - **published** (bool, необязательное): Новый статус публикации.
 
     Возвращаемое значение:
     - Обновлённый объект поста.
@@ -66,10 +66,12 @@ async def update_post(
     - **422 Unprocessable Entity**: Ошибка валидации входных данных.
     """
     # реализация...
+    # TODO: добавить получение по id
+    return PostResponse(id=data.id, content=data.content)
 
 
-@router.delete("/{post_id}")
-def delete_post(post_id: int):
+@router.delete("/{post_id}", status_code=204)
+def delete_post(post: PostPath = Depends()):
     """
     Удаление поста по его идентификатору.
 
@@ -77,10 +79,11 @@ def delete_post(post_id: int):
     - **post_id** (int): Идентификатор поста, который требуется удалить.
 
     Возвращаемое значение:
-    - При успешном удалении возвращается сообщение об успехе или пустой ответ.
+    - При успешном удалении тело ответа отсутствует.
 
     Возможные статус-коды ответа:
-    - **204 No Content**: Пост успешно удалён (тело ответа отсутствует).
+    - **204 No Content**: Пост успешно удалён.
     - **404 Not Found**: Пост с указанным `id` не найден.
     """
     # реализация...
+    return None  # или просто return (без значения)
