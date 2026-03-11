@@ -2,19 +2,19 @@ from typing import Annotated
 
 from fastapi import Depends
 
-
-def get_project_service():
-    return ProjectService()
-
-
-class ProjectRepository:
-    def get_by_id(self, id: int):
-        pass
+from .repository import ProjectRepoDeps, ProjectRepository
 
 
 class ProjectService:
+    def __init__(self, repo: ProjectRepository):
+        self.repo = repo
+
     def get_project(self, project_id: int):
-        return project_id
+        return self.repo.get_by_id(project_id)
+
+
+def get_project_service(repo: ProjectRepoDeps):
+    return ProjectService(repo)
 
 
 ProjectServiceDeps = Annotated[ProjectService, Depends(get_project_service)]
