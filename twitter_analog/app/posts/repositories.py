@@ -2,12 +2,12 @@ from fastapi import Depends
 from typing_extensions import Annotated
 
 
-class TaskRepository:
+class PostRepository:
     pass
 
 
-def get_task_repository():
-    return TaskRepository()
+def get_post_repository():
+    return PostRepository()
 
 
-TaskRepoDeps = Annotated[TaskRepository, Depends(get_task_repository)]
+PostRepoDeps = Annotated[PostRepository, Depends(get_post_repository)]

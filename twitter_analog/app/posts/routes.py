@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Body, Depends
 
-from .services import TaskServiceDeps
+from .services import PostServiceDeps
 
 from .schema import CreatePostRequest, PostPath, PostResponse, UpdatePostRequest
 
@@ -20,7 +20,7 @@ router = APIRouter(prefix="/posts", tags=["Posts"])
     - В случае, если пост с указанным ID не найден, возвращается ошибка 404 Not Found.
     """,
 )
-def get_post(service: TaskServiceDeps, post: PostPath = Depends()):
+def get_post(service: PostServiceDeps, post: PostPath = Depends()):
     # реализация функции...
     return PostResponse(content="new post", id=post.post_id)
 

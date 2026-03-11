@@ -2,16 +2,16 @@ from typing import Annotated
 
 from fastapi import Depends
 
-from .repositories import TaskRepoDeps, TaskRepository
+from .repositories import PostRepoDeps, PostRepository
 
 
-class TaskService:
-    def __init__(self, repo: TaskRepository):
+class PostService:
+    def __init__(self, repo: PostRepository):
         self.repo = repo
 
 
-def get_task_service(repo: TaskRepoDeps):
-    return TaskService(repo)
+def get_post_service(repo: PostRepoDeps):
+    return PostService(repo)
 
 
-TaskServiceDeps = Annotated[TaskService, Depends(get_task_service)]
+PostServiceDeps = Annotated[PostService, Depends(get_post_service)]
