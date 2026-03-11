@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Body, Depends
 
-from .service import ProjectService, get_project_service
+from .service import ProjectService, ProjectServiceDeps, get_project_service
 
 from .schema import (
     ProjectCreateRequest,
@@ -29,8 +29,8 @@ async def create_project(data: ProjectCreateRequest):
 
 @router.get("/{project_id}", response_model=ProjectGetResponse, status_code=200)
 async def get_project(
+    service: ProjectServiceDeps,
     path: ProjectPath = Depends(),
-    service: ProjectService = Depends(get_project_service),
 ):
     print(service.get_project(path.project_id))
     return ProjectGetResponse(
