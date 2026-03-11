@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Body, Depends
 
+from .repository import ProjectRepoDeps
+
 from .service import ProjectService, ProjectServiceDeps, get_project_service
 
 from .schema import (
@@ -30,6 +32,7 @@ async def create_project(data: ProjectCreateRequest):
 @router.get("/{project_id}", response_model=ProjectGetResponse, status_code=200)
 async def get_project(
     service: ProjectServiceDeps,
+    repo: ProjectRepoDeps,
     path: ProjectPath = Depends(),
 ):
     print(service.get_project(path.project_id))
