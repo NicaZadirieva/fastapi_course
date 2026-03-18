@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     app_name: str = "Board API"
     debug: bool = False
 
-    database_url: str = Field(validation_alias="DATABASE_URL")
+    database_url: str
 
     @property
     def db(self) -> DatabaseSettings:
