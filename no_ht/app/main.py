@@ -7,16 +7,6 @@ from app.tasks.routes import router as tasks_router
 
 
 def create_app() -> FastAPI:
-    logging.basicConfig(
-        level=logging.INFO,
-        stream=sys.stdout,
-        format="%(asctime)s [%(levelname)s] %(name)s - %(message)s",
-    )
-    for name in ("uvicorn", "uvicorn.error", "uvicorn.access"):
-        lg = logging.getLogger(name)
-        lg.handlers.clear()
-        lg.propagate = True
-
     settings = Settings()  # type: ignore[call-arg]
     new_app = FastAPI(
         title=settings.app.name,
