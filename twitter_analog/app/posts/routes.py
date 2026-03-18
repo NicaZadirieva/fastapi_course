@@ -1,3 +1,4 @@
+import logging
 from fastapi import APIRouter, Body, Depends
 
 from .services import PostServiceDeps
@@ -5,6 +6,8 @@ from .services import PostServiceDeps
 from .schema import CreatePostRequest, PostPath, PostResponse, UpdatePostRequest
 
 router = APIRouter(prefix="/posts", tags=["Posts"])
+
+logger = logging.getLogger(__name__)
 
 
 @router.get(
@@ -22,6 +25,7 @@ router = APIRouter(prefix="/posts", tags=["Posts"])
 )
 def get_post(service: PostServiceDeps, post: PostPath = Depends()):
     # реализация функции...
+    logger.info("Успешное получение поста", extra={"post_id": post.post_id})
     return PostResponse(content="new post", id=post.post_id)
 
 
