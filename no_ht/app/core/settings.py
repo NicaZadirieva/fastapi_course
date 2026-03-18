@@ -1,3 +1,5 @@
+from typing import Annotated
+from fastapi import Depends
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -27,3 +29,10 @@ class Settings(BaseSettings):
     @property
     def app(self) -> AppSettings:
         return AppSettings(debug=self.debug, app_name=self.app_name)
+
+
+def get_settings() -> Settings:
+    return Settings()  # type: ignore[call-arg]
+
+
+SettingsDeps = Annotated[Settings, Depends(get_settings)]
