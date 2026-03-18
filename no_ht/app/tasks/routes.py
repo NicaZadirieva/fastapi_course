@@ -16,5 +16,4 @@ async def get_task(
     settings: SettingsDeps,
     path: TaskPath = Depends(),
 ):
-    print(settings.db.url)
     return TaskResponse(id=path.task_id)
