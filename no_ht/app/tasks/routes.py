@@ -1,5 +1,5 @@
 import logging
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from app.core.settings import SettingsDeps
 
@@ -19,4 +19,11 @@ async def get_task(
     path: TaskPath = Depends(),
 ):
     logger.info("ID: %s", path.task_id, extra={"user_id": 1})
+    try:
+        if path.task_id > 100:
+            raise ValueError(">100")
+    except ValueError as e:
+        logger.error("Ошибка %s", e, exc_info=True)
+        raise HTTPException(404, "Не найдено")
+
     return TaskResponse(id=path.task_id)
