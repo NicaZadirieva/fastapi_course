@@ -18,5 +18,5 @@ async def get_task(
     settings: SettingsDeps,
     path: TaskPath = Depends(),
 ):
-    logger.info("ID: %s", path.task_id)
+    logger.info("ID: %s", path.task_id, extra={"user_id": 1})
     return TaskResponse(id=path.task_id)
