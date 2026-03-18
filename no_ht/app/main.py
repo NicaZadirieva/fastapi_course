@@ -5,8 +5,11 @@ from app.core.settings import Settings
 from app.projects.routes import router as project_router
 from app.tasks.routes import router as tasks_router
 
+logger = logging.getLogger(__name__)
+
 
 def create_app() -> FastAPI:
+    logger.debug("Запуск")
     settings = Settings()  # type: ignore[call-arg]
     new_app = FastAPI(
         title=settings.app.name,
