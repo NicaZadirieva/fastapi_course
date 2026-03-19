@@ -12,6 +12,9 @@ class ProjectService:
     def get_project(self, project_id: int):
         return self.repo.get_by_id(project_id)
 
+    async def create(self):
+        return await self.repo.create()
+
 
 def get_project_service(repo: ProjectRepoDeps):
     return ProjectService(repo)

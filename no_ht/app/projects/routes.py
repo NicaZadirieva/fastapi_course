@@ -2,7 +2,7 @@ from fastapi import APIRouter, Body, Depends
 
 from .repository import ProjectRepoDeps
 
-from .service import ProjectService, ProjectServiceDeps, get_project_service
+from .service import ProjectServiceDeps
 
 from .schema import (
     ProjectCreateRequest,
@@ -25,7 +25,8 @@ router = APIRouter(prefix="/v1/projects", tags=["Projects"])
     Создает проект. Если ошибка, то возвращает 500
     """,
 )
-async def create_project(data: ProjectCreateRequest):
+async def create_project(data: ProjectCreateRequest, service: ProjectServiceDeps):
+    res = await service.create()
     return ProjectCreateResponse(id=1, name=data.name)
 
 
