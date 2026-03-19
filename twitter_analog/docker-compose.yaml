@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  postgres:
+    container_name: postgres_twitter_analog
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: my_pass
+      PGDATA: /data/postgres
+    volumes:
+      - postgres_data:/data/postgres # named volume, not bind mount
+    ports:
+      - "5440:5432"
+
+volumes:
+  postgres_data: # declare the volume
