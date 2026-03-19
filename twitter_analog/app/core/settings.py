@@ -11,6 +11,7 @@ class AppSettings(BaseModel):
 
 class DatabaseSettings(BaseModel):
     url: str
+    url_sync: str
 
 
 class AuthSettings(BaseModel):
@@ -23,12 +24,13 @@ class Settings(BaseSettings):
     )
 
     database_url: str
+    database_url_sync: str
     jwt_secret: str
     minimal_post_debounce_time: int = Field(ge=0)
 
     @property
     def db(self) -> DatabaseSettings:
-        return DatabaseSettings(url=self.database_url)
+        return DatabaseSettings(url=self.database_url, url_sync=self.database_url_sync)
 
     @property
     def app(self) -> AppSettings:
