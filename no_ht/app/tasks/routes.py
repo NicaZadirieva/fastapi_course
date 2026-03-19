@@ -1,7 +1,7 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.core.db import check_db
+from app.core.db import DbSessionDeps, check_db
 from app.core.settings import SettingsDeps
 
 from .service import TaskServiceDeps
@@ -17,9 +17,10 @@ logger = logging.getLogger(__name__)
 async def get_task(
     service: TaskServiceDeps,
     settings: SettingsDeps,
+    db_session: DbSessionDeps,
     path: TaskPath = Depends(),
 ):
-    data = await check_db()
+    data = await check_db(db_session)
     logger.info("db check: %s", data)
     logger.info("ID: %s", path.task_id, extra={"user_id": 1})
     try:
