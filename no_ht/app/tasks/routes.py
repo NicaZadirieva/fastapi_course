@@ -1,6 +1,7 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException
 
+from app.core.db import check_db
 from app.core.settings import SettingsDeps
 
 from .service import TaskServiceDeps
@@ -18,6 +19,8 @@ async def get_task(
     settings: SettingsDeps,
     path: TaskPath = Depends(),
 ):
+    data = await check_db()
+    logger.info("db check: %s", data)
     logger.info("ID: %s", path.task_id, extra={"user_id": 1})
     try:
         if path.task_id > 100:
