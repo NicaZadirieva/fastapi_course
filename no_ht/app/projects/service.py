@@ -28,6 +28,13 @@ class ProjectService:
             setattr(project, field, value)
         return await self.repo.save(project)
 
+    async def delete(self, project_id: int):
+        project = await self.repo.get_by_id(project_id)
+        if project is None:
+            return False
+        await self.repo.delete(project)
+        return True
+
 
 def get_project_service(repo: ProjectRepoDeps):
     return ProjectService(repo)

@@ -23,6 +23,10 @@ class ProjectRepository:
         logger.info(project)
         return project
 
+    async def delete(self, project: Project):
+        await self.db_session.delete(project)
+        await self.db_session.commit()
+
 
 def get_project_repository(db_session: DbSessionDeps):
     return ProjectRepository(db_session)
