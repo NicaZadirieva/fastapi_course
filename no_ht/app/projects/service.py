@@ -2,6 +2,9 @@ from typing import Annotated
 
 from fastapi import Depends
 
+from .model import Project
+from app.projects.schema import ProjectCreateRequest
+
 from .repository import ProjectRepoDeps, ProjectRepository
 
 
@@ -12,8 +15,9 @@ class ProjectService:
     def get_project(self, project_id: int):
         return self.repo.get_by_id(project_id)
 
-    async def create(self):
-        return await self.repo.create()
+    async def create(self, data: ProjectCreateRequest):
+        project = Project(key=data.key, name=data.name, description=data.description)
+        return await self.repo.create(project)
 
 
 def get_project_service(repo: ProjectRepoDeps):

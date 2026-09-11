@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field, field_validator
 
 class ProjectCreateRequest(BaseModel):
     key: str
-    name: str
+    name: str | None = None
     description: str | None = None
 
     @field_validator("key")
@@ -17,7 +17,7 @@ class ProjectCreateRequest(BaseModel):
 
 class ProjectCreateResponse(BaseModel):
     id: int
-    name: str
+    name: str | None
 
 
 class ProjectPath(BaseModel):

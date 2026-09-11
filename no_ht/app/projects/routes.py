@@ -26,8 +26,8 @@ router = APIRouter(prefix="/v1/projects", tags=["Projects"])
     """,
 )
 async def create_project(data: ProjectCreateRequest, service: ProjectServiceDeps):
-    res = await service.create()
-    return ProjectCreateResponse(id=1, name=data.name)
+    res = await service.create(data)
+    return ProjectCreateResponse(id=res.id, name=res.name)
 
 
 @router.get("/{project_id}", response_model=ProjectGetResponse, status_code=200)

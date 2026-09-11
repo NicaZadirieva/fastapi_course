@@ -16,14 +16,12 @@ class ProjectRepository:
     def get_by_id(self, project_id: int):
         return project_id
 
-    async def create(self):
-        project = Project(
-            key="ps", name="purpleschool", description="Обучающая платформа"
-        )
+    async def create(self, project: Project):
         self.db_session.add(project)
         await self.db_session.commit()
         await self.db_session.refresh(project)
         logger.info(project)
+        return project
 
 
 def get_project_repository(db_session: DbSessionDeps):
