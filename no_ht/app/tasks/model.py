@@ -1,6 +1,10 @@
-from sqlalchemy import Boolean, String, Text
+from typing import TYPE_CHECKING
+from sqlalchemy import Boolean, ForeignKey, String, Text
 from app.core.db import Base
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+if TYPE_CHECKING:
+    from app.projects.model import Project
 
 
 class Task(Base):
@@ -10,6 +14,10 @@ class Task(Base):
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     is_completed: Mapped[bool] = mapped_column(Boolean, default=False)
+    project_id: Mapped[int] = mapped_column(
+        ForeignKey("projects.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    project: Mapped["Project"] = relationship("Project", back_populates="tasks")
 
     def __init__(
         self, title: str, description: str | None = None, is_completed: bool = False

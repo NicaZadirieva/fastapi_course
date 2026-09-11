@@ -6,6 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 from app.core.db import Base
 import app.projects.model  # noqa: F401
+import app.tasks.model  # noqaL F402
 from app.core.settings import Settings
 
 # this is the Alembic Config object, which provides
