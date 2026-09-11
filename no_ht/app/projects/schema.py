@@ -39,5 +39,5 @@ class ProjectUpdateResponse(BaseModel):
 class ProjectGetResponse(BaseModel):
     id: int
     key: str
-    name: str
+    name: str | None = None
     description: str | None = None

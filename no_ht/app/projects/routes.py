@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body, Depends, HTTPException
 
 from .repository import ProjectRepoDeps
 
@@ -36,9 +36,14 @@ async def get_project(
     repo: ProjectRepoDeps,
     path: ProjectPath = Depends(),
 ):
-    print(service.get_project(path.project_id))
+    project = await service.get_project(path.project_id)
+    if project is None:
+        raise HTTPException(404, "Project not found")
     return ProjectGetResponse(
-        id=path.project_id, key="key", name="name", description="smth"
+        id=project.id,
+        key=project.key,
+        name=project.name,
+        description=project.description,
     )
 
 

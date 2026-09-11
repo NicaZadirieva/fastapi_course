@@ -13,8 +13,8 @@ class ProjectRepository:
     def __init__(self, db_session: DbSessionDeps):
         self.db_session = db_session
 
-    def get_by_id(self, project_id: int):
-        return project_id
+    async def get_by_id(self, project_id: int):
+        return await self.db_session.get(Project, project_id)
 
     async def create(self, project: Project):
         self.db_session.add(project)
