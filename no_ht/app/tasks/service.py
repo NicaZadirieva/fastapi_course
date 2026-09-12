@@ -14,6 +14,9 @@ class TaskService:
         self.task_repo = task_repo
         self.project_repo = project_repo
 
+    async def get_task(self, task_id: int):
+        return await self.task_repo.get_by_id(task_id)
+
     async def create(self, data: TaskCreateRequest):
         project = await self.project_repo.get_by_id(data.project_id)
         if project is None:

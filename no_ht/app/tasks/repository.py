@@ -13,8 +13,9 @@ class TaskRepository:
     def __init__(self, db_session: DbSessionDeps):
         self.db_session = db_session
 
-    def get_by_id(self, id: int):
-        return id
+    async def get_by_id(self, id: int):
+        task = await self.db_session.get(Task, id)
+        return task
 
     async def save(self, task: Task):
         self.db_session.add(task)

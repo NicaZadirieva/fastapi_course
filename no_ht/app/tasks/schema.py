@@ -1,12 +1,16 @@
 from pydantic import BaseModel, Field
 
 
-class TaskPath(BaseModel):
+class GetTaskPath(BaseModel):
     task_id: int = Field(gt=0)
 
 
-class TaskResponse(BaseModel):
+class GetTaskResponse(BaseModel):
     id: int
+    title: str
+    description: str | None = None
+    is_completed: bool = False
+    project_id: int
 
 
 class TaskCreateRequest(BaseModel):

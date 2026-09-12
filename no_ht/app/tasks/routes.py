@@ -1,37 +1,41 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.core.db import DbSessionDeps, check_db
+from app.core.db import DbSessionDeps
 from app.core.settings import SettingsDeps
-from app.projects.schema import ProjectCreateResponse
+
 
 from .service import TaskServiceDeps
 
-from .schema import TaskCreateRequest, TaskCreateResponse, TaskPath, TaskResponse
+from .schema import (
+    GetTaskPath,
+    GetTaskResponse,
+    TaskCreateRequest,
+    TaskCreateResponse,
+)
 
 
 router = APIRouter(prefix="/v1/tasks", tags=["Tasks"])
 logger = logging.getLogger(__name__)
 
 
-@router.get("/{task_id}", response_model=TaskResponse, status_code=200)
+@router.get("/{task_id}", response_model=GetTaskResponse | None, status_code=200)
 async def get_task(
     service: TaskServiceDeps,
     settings: SettingsDeps,
     db_session: DbSessionDeps,
-    path: TaskPath = Depends(),
+    path: GetTaskPath = Depends(),
 ):
-    data = await check_db(db_session)
-    logger.info("db check: %s", data)
-    logger.info("ID: %s", path.task_id, extra={"user_id": 1})
-    try:
-        if path.task_id > 100:
-            raise ValueError(">100")
-    except ValueError as e:
-        logger.error("Ошибка %s", e, exc_info=True)
-        raise HTTPException(404, "Не найдено")
-
-    return TaskResponse(id=path.task_id)
+    task = await service.get_task(path.task_id)
+    if task is None:
+        return None
+    return GetTaskResponse(
+        id=task.id,
+        title=task.title,
+        description=task.description,
+        is_completed=task.is_completed,
+        project_id=task.project_id,
+    )
 
 
 @router.post(
