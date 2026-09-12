@@ -4,7 +4,7 @@ from fastapi import Depends
 
 from app.projects.repository import ProjectRepoDeps, ProjectRepository
 from app.tasks.model import Task
-from app.tasks.schema import TaskCreateRequest
+from app.tasks.schema import TaskCreateRequest, TaskSearchParams
 
 from .repository import TaskRepoDeps, TaskRepository
 
@@ -28,6 +28,9 @@ class TaskService:
             project_id=data.project_id,
         )
         return await self.task_repo.save(task)
+
+    async def search(self, params: TaskSearchParams) -> tuple[list[Task], int]:
+        return await self.task_repo.search(offset=params.offset, limit=params.limit)
 
 
 def get_task_service(task_repo: TaskRepoDeps, project_repo: ProjectRepoDeps):

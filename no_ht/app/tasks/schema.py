@@ -26,3 +26,15 @@ class TaskCreateResponse(BaseModel):
     title: str
     description: str | None = None
     is_completed: bool = False
+
+
+class TaskSearchParams(BaseModel):
+    offset: int = Field(0, ge=0)
+    limit: int = Field(20, ge=1, le=100)
+
+
+class TaskSearchResponse(BaseModel):
+    items: list[GetTaskResponse]
+    total: int
+    offset: int
+    limit: int

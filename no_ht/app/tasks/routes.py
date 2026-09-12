@@ -1,41 +1,20 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.core.db import DbSessionDeps
-from app.core.settings import SettingsDeps
-
 
 from .service import TaskServiceDeps
 
 from .schema import (
-    GetTaskPath,
     GetTaskResponse,
     TaskCreateRequest,
     TaskCreateResponse,
+    TaskSearchParams,
+    TaskSearchResponse,
 )
 
 
-router = APIRouter(prefix="/v1/tasks", tags=["Tasks"])
+router = APIRouter(prefix="/v2/tasks", tags=["Tasks"])
 logger = logging.getLogger(__name__)
-
-
-@router.get("/{task_id}", response_model=GetTaskResponse | None, status_code=200)
-async def get_task(
-    service: TaskServiceDeps,
-    settings: SettingsDeps,
-    db_session: DbSessionDeps,
-    path: GetTaskPath = Depends(),
-):
-    task = await service.get_task(path.task_id)
-    if task is None:
-        return None
-    return GetTaskResponse(
-        id=task.id,
-        title=task.title,
-        description=task.description,
-        is_completed=task.is_completed,
-        project_id=task.project_id,
-    )
 
 
 @router.post(
@@ -57,4 +36,52 @@ async def create_task(data: TaskCreateRequest, service: TaskServiceDeps):
         title=task.title,
         description=task.description,
         is_completed=task.is_completed,
+    )
+
+
+@router.get(
+    "/",
+    response_model=TaskSearchResponse,
+    status_code=200,
+    summary="Ищет задачи",
+    description="""
+    Ищет задачу. Если ошибка, то возвращает 500
+    """,
+)
+async def search_task(
+    service: TaskServiceDeps,
+    params: TaskSearchParams = Depends(),
+):
+    tasks, total = await service.search(params)
+    return TaskSearchResponse(
+        items=[
+            GetTaskResponse(
+                id=task.id,
+                title=task.title,
+                description=task.description,
+                is_completed=task.is_completed,
+                project_id=task.project_id,
+            )
+            for task in tasks
+        ],
+        total=total,
+        offset=params.offset,
+        limit=params.limit,
+    )
+
+
+@router.get("/{task_id}", response_model=GetTaskResponse | None, status_code=200)
+async def get_task(
+    task_id: int,
+    service: TaskServiceDeps,
+):
+    task = await service.get_task(task_id)
+    if task is None:
+        return None
+    return GetTaskResponse(
+        id=task.id,
+        title=task.title,
+        description=task.description,
+        is_completed=task.is_completed,
+        project_id=task.project_id,
     )

@@ -13,7 +13,7 @@ from .schema import (
     ProjectUpdateResponse,
 )
 
-router = APIRouter(prefix="/v1/projects", tags=["Projects"])
+router = APIRouter(prefix="/v2/projects", tags=["Projects"])
 
 
 @router.post(
