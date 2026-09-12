@@ -18,7 +18,7 @@ class Project(Base):
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     tasks: Mapped[list["Task"]] = relationship(
         "Task",
-        back_populates="projects",
+        back_populates="project",
         cascade="all, delete-orphan",
         passive_deletes=True,
     )

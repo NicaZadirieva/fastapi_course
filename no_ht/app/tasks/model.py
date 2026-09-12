@@ -20,8 +20,13 @@ class Task(Base):
     project: Mapped["Project"] = relationship("Project", back_populates="tasks")
 
     def __init__(
-        self, title: str, description: str | None = None, is_completed: bool = False
+        self,
+        title: str,
+        project_id: int,
+        description: str | None = None,
+        is_completed: bool = False,
     ):
         self.title = title
         self.description = description
         self.is_completed = is_completed
+        self.project_id = project_id
