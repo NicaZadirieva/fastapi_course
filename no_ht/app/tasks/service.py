@@ -30,7 +30,9 @@ class TaskService:
         return await self.task_repo.save(task)
 
     async def search(self, params: TaskSearchParams) -> tuple[list[Task], int]:
-        return await self.task_repo.search(offset=params.offset, limit=params.limit)
+        return await self.task_repo.search(
+            offset=params.offset, limit=params.limit, project_id=params.project_id
+        )
 
 
 def get_task_service(task_repo: TaskRepoDeps, project_repo: ProjectRepoDeps):
