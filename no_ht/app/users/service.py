@@ -4,8 +4,8 @@ from fastapi import Depends, HTTPException
 
 from app.projects.repository import ProjectRepoDeps, ProjectRepository
 from app.users.model import User
-from app.users.schema import UserCreateRequest
-from app.users.security import hash_password
+from app.users.schema import UserCreateRequest, UserLoginRequest
+from app.users.security import hash_password, verify_password
 
 from .repository import UserRepoDeps, UserRepository
 
@@ -27,6 +27,14 @@ class UserService:
             is_active=data.is_active,
         )
         return await self.user_repo.save(new_user)
+
+    async def authenticate(self, data: UserLoginRequest):
+        user = await self.user_repo.get_by_email(data.email)
+        if user is None:
+            return False
+        if not verify_password(data.password, user.hashed_password):
+            return False
+        return True
 
 
 def get_user_service(user_repo: UserRepoDeps):
