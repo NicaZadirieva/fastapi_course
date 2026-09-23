@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import Depends, HTTPException
 
 from app.projects.repository import ProjectRepoDeps, ProjectRepository
+from app.users.jwt import create_access_token
 from app.users.model import User
 from app.users.schema import UserCreateRequest, UserLoginRequest
 from app.users.security import hash_password, verify_password
@@ -26,15 +27,18 @@ class UserService:
             hashed_password=hash_password(data.password),
             is_active=data.is_active,
         )
-        return await self.user_repo.save(new_user)
+        saved_user = await self.user_repo.save(new_user)
+        jwt = create_access_token(saved_user.id)
+        return jwt
 
     async def authenticate(self, data: UserLoginRequest):
         user = await self.user_repo.get_by_email(data.email)
         if user is None:
-            return False
+            return None
         if not verify_password(data.password, user.hashed_password):
-            return False
-        return True
+            return None
+        jwt = create_access_token(user.id)
+        return jwt
 
 
 def get_user_service(user_repo: UserRepoDeps):

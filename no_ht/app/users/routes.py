@@ -1,14 +1,15 @@
 import logging
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
+
+from app.users.jwt import create_access_token
 
 
 from .service import UserServiceDeps
 
 from .schema import (
+    JWTResponse,
     UserCreateRequest,
-    UserCreateResponse,
     UserLoginRequest,
-    UserLoginResponse,
 )
 
 
@@ -18,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 @router.post(
     "/register",
-    response_model=UserCreateResponse,
+    response_model=JWTResponse,
     status_code=201,
     summary="Создает пользователя",
     description="""
@@ -26,13 +27,13 @@ logger = logging.getLogger(__name__)
     """,
 )
 async def register(data: UserCreateRequest, service: UserServiceDeps):
-    user = await service.create(data)
-    return UserCreateResponse(id=user.id, email=user.email)
+    jwt = await service.create(data)
+    return JWTResponse(jwt=jwt)
 
 
 @router.post(
     "/login",
-    response_model=UserLoginResponse,
+    response_model=JWTResponse,
     status_code=200,
     summary="Авторизовывает пользователя",
     description="""
@@ -40,5 +41,8 @@ async def register(data: UserCreateRequest, service: UserServiceDeps):
     """,
 )
 async def login(data: UserLoginRequest, service: UserServiceDeps):
-    is_logined = await service.authenticate(data)
-    return UserLoginResponse(is_logined=is_logined)
+    jwt = await service.authenticate(data)
+    if jwt is None:
+        raise HTTPException(401, "Wrong email or password")
+    else:
+        return JWTResponse(jwt=jwt)

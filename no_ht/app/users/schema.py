@@ -7,16 +7,11 @@ class UserCreateRequest(BaseModel):
     password: str
 
 
-class UserCreateResponse(BaseModel):
-    id: int
-    email: str
+class JWTResponse(BaseModel):
+    jwt: str
 
 
 class UserLoginRequest(BaseModel):
     email: str
     password: str
     model_config = {"extra": "forbid"}
-
-
-class UserLoginResponse(BaseModel):
-    is_logined: bool
