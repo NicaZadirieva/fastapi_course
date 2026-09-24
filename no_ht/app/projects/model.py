@@ -25,7 +25,7 @@ class Project(Base):
         passive_deletes=True,
     )
     project_members: Mapped[list["ProjectMembers"]] = relationship(
-        "ProjectMembers", back_populates="projects"
+        "ProjectMembers", back_populates="project"
     )
 
     def __init__(
@@ -50,3 +50,8 @@ class ProjectMembers(Base):
     project: Mapped["Project"] = relationship(
         "Project", back_populates="project_members"
     )
+
+    def __init__(self, user_id: int, project_id: int, role: str):
+        self.user_id = user_id
+        self.project_id = project_id
+        self.role = role

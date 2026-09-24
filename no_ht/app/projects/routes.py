@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Body, Depends, HTTPException
 
+from app.users.current_user import CurrentUserDeps
+
 from .repository import ProjectRepoDeps
 
 from .service import ProjectServiceDeps
@@ -25,8 +27,12 @@ router = APIRouter(prefix="/v2/projects", tags=["Projects"])
     Создает проект. Если ошибка, то возвращает 500
     """,
 )
-async def create_project(data: ProjectCreateRequest, service: ProjectServiceDeps):
-    res = await service.create(data)
+async def create_project(
+    data: ProjectCreateRequest,
+    service: ProjectServiceDeps,
+    current_user: CurrentUserDeps,
+):
+    res = await service.create(data, current_user.id)
     return ProjectCreateResponse(id=res.id, name=res.name)
 
 
@@ -50,11 +56,12 @@ async def get_project(
 @router.patch("/{project_id}", response_model=ProjectUpdateResponse)
 async def update_project(
     service: ProjectServiceDeps,
+    current_user: CurrentUserDeps,
     path: ProjectPath = Depends(),
     data: ProjectUpdateRequest = Body(),
 ):
     # получение project
-    project = await service.update(path.project_id, data)
+    project = await service.update(path.project_id, data, current_user.id)
     if project is None:
         raise HTTPException(404, "Project not found")
 
