@@ -1,8 +1,6 @@
 import logging
 from fastapi import APIRouter, HTTPException
 
-from app.users.jwt import create_access_token
-
 
 from .service import UserServiceDeps
 
