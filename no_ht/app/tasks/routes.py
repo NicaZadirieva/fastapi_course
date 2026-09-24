@@ -1,6 +1,8 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException
 
+from app.users.current_user import CurrentUserDeps
+
 
 from .service import TaskServiceDeps
 
@@ -50,8 +52,10 @@ async def create_task(data: TaskCreateRequest, service: TaskServiceDeps):
 )
 async def search_task(
     service: TaskServiceDeps,
+    current_user: CurrentUserDeps,
     params: TaskSearchParams = Depends(),
 ):
+    logger.info(current_user)
     tasks, total = await service.search(params)
     return TaskSearchResponse(
         items=[
