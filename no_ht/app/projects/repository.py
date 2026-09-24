@@ -16,6 +16,15 @@ class ProjectRepository:
     async def get_by_id(self, project_id: int):
         return await self.db_session.get(Project, project_id)
 
+    async def get_member(self, project_id: int, user_id: int):
+        return await self.db_session.get(
+            ProjectMembers,
+            (
+                user_id,
+                project_id,
+            ),
+        )
+
     async def save(self, project: Project, user_id: int):
         self.db_session.add(project)
         await self.db_session.flush()

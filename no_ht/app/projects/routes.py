@@ -40,9 +40,10 @@ async def create_project(
 async def get_project(
     service: ProjectServiceDeps,
     repo: ProjectRepoDeps,
+    current_user: CurrentUserDeps,
     path: ProjectPath = Depends(),
 ):
-    project = await service.get_project(path.project_id)
+    project = await service.get_project(path.project_id, current_user.id)
     if project is None:
         raise HTTPException(404, "Project not found")
     return ProjectGetResponse(
